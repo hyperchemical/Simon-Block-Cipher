@@ -25,16 +25,9 @@ mpz_class mpz_left_circular_shift(mpz_class num, const mpz_class& shift)
 	mpz_class size, mask_right, mask_left, lshift, rshift, shift_val, diff;
 	size = mpz_sizeinbase(num.get_mpz_t(), 2);
 	//Get lshift val
-	
-	// if(shift < 0){
-	// 	mpz_mod(shift_val.get_mpz_t(), shift.get_mpz_t(), num.get_mpz_t());
-	// 	cout << shift_val << endl;
-	// 	shift_val = size - shift_val;
 
-	// } else {
+
 	mpz_mod(shift_val.get_mpz_t(), shift.get_mpz_t(), size.get_mpz_t());
-	//cout << "shift val: " << shift_val << endl;
-	// }
 	diff = size-shift_val;
 
 	//Calculate both shifters for left and right parts
@@ -70,9 +63,7 @@ mpz_class mpz_left_circular_shift(mpz_class num, const mpz_class& shift)
 	//cout << "shifted off: " << shifted_off << endl;
 	//Restore number
 	mpz_ior(num.get_mpz_t(), shifted_off.get_mpz_t(), num.get_mpz_t());
-	//cout << "num: " << num << endl;
 
-	//cout << "AFTER SHIFT " << num << endl;
 	return num;
 }
 
@@ -88,7 +79,7 @@ class Simon{
 		read_keys();
 		key_expansion();
 		print_keywords_to_file();
-		vector<mpz_class> yo = split_message("test message", 64);
+		vector<mpz_class> yo = split_message("test message", block_size/2);
 		for (int i = 0; i < yo.size(); ++i)
 		{
 			cout << yo[i] << endl;
@@ -97,8 +88,11 @@ class Simon{
 	
 		encrypt(yo[0], yo[1]);
 
-		for(auto i : yo){
-			cout << i << endl;
+		decrypt(yo[0], yo[1]);
+		for (int i = 0; i < yo.size(); ++i)
+		{
+			cout << yo[i] << endl;
+			cout << mpz_to_string(yo[i]) << endl;
 		}
 	}
 
@@ -183,7 +177,6 @@ z = [11111010001001010110000111001101111101000100101011000011100110,
 			// mpz_xor(keywords[i].get_mpz_t(), keywords[i].get_mpz_t(), three.get_mpz_t());
 			
 		}
-		//cout << endl;
 	}
 
 	void encrypt(mpz_class& x, mpz_class& y){
@@ -200,8 +193,21 @@ z = [11111010001001010110000111001101111101000100101011000011100110,
 				^ mpz_get_ui(keywords[i].get_mpz_t());
 			y = tmp;
 		}
+	}
 
-
+	void decrypt(mpz_class &x, mpz_class &y){
+		mpz_class one, eight, two;
+		one = "1", eight = "8", two = "2";
+		for(int i = rounds-1; i >= 0; i--){
+			unsigned long tmp;
+			tmp = mpz_get_ui(y.get_mpz_t());
+			y = mpz_get_ui(y.get_mpz_t()) ^ 
+				(mpz_get_ui(mpz_left_circular_shift(x, one).get_mpz_t()) &
+					mpz_get_ui(mpz_left_circular_shift(x, eight).get_mpz_t()))
+				^ mpz_get_ui(mpz_left_circular_shift(x, two).get_mpz_t())
+				^ mpz_get_ui(keywords[i].get_mpz_t());
+			x = tmp;
+		}
 	}
 
 	void print_keywords_to_file(){
