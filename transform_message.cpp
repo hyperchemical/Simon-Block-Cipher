@@ -1,0 +1,79 @@
+#include <string>
+#include <stdlib.h>
+#include <iostream>
+#include <gmpxx.h>
+#include <stdio.h>
+#include <vector>
+#include <stdlib.h>
+#include <stdexcept> 
+#include <cstdio>
+
+using namespace std;
+
+#define BIT_MOD 8
+#define BIT_MOD_2 3
+
+mpz_class string_to_mpz(const char* message){
+	mpz_class output;
+	output = "0";
+	string input(message);
+	for(int i = 0; i < input.size(); i++){
+		output *= 256;
+		int ascii = input[i];
+		output += ascii;
+	}
+	return output;
+}
+
+string mpz_to_string(const mpz_class& mpz_input){
+	mpz_class numchars, character, size, bit;
+	character = "0";
+	size = mpz_sizeinbase(mpz_input.get_mpz_t(), 2);
+	mpz_cdiv_q_2exp(numchars.get_mpz_t(), size.get_mpz_t(), BIT_MOD_2);
+	string output(mpz_get_ui(numchars.get_mpz_t()), 'X');
+	for(; character < numchars; character = character+1){
+		int cur_char = 0;
+		//for(bit = character*BIT_MOD;  bit < (character+1)*BIT_MOD; bit = bit+1){
+		for(bit = (character+1)*BIT_MOD-1;  bit >= character*BIT_MOD; bit = bit-1){
+			cur_char*=2;
+			cur_char += mpz_tstbit(mpz_input.get_mpz_t(), mpz_get_ui(bit.get_mpz_t()));
+		}
+		char ch = cur_char;
+		output[mpz_get_ui(numchars.get_mpz_t())- 1 - mpz_get_ui(character.get_mpz_t())] 
+			= cur_char;
+	}
+	return output;
+
+}
+
+vector<mpz_class> split_message(const char* message, int bit_length){
+	if(bit_length% BIT_MOD != 0) {
+		printf("ERROR: %s:%d - Bit length not a multiple of %d\n", 
+				__FILE__, __LINE__, BIT_MOD);
+		exit(1);
+	}
+	string input(message);
+	mpz_class size;
+	size = input.size();
+	mpz_cdiv_q_2exp(size.get_mpz_t(), size.get_mpz_t(), BIT_MOD_2);
+	vector<mpz_class> message_vec(mpz_get_ui(size.get_mpz_t()));
+	cout << message_vec.size() << endl;
+	for(int i = 0; i < message_vec.size(); i++){
+		message_vec[i] = 
+			string_to_mpz(input.substr(i*BIT_MOD,BIT_MOD).c_str());
+	}
+
+	for(auto i : message_vec){
+		cout << mpz_to_string(i) << endl;
+	}
+
+	return message_vec;
+}
+
+int main(){
+	string hi = "hi";
+	//cout << string_to_mpz(" ") << endl;
+	split_message("test string", 128);
+}
+
+//|12345678|
