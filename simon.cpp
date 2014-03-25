@@ -67,6 +67,10 @@ mpz_class mpz_left_circular_shift(mpz_class num, const mpz_class& shift)
 	return num;
 }
 
+unsigned long circular_left_shift(unsigned long num, unsigned long shift, unsigned long size){
+	return (num << shift) | (num >> (size - shift));
+}
+
 class Simon{
 	public:
 
