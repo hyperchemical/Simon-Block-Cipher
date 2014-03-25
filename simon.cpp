@@ -71,6 +71,11 @@ unsigned long circular_left_shift(unsigned long num, unsigned long shift, unsign
 	return (num << shift) | (num >> (size - shift));
 }
 
+unsigned long circular_right_shift(unsigned long num, unsigned long shift, unsigned long size){
+	return (num >> shift) | (num << (size-shift));
+}
+
+
 class Simon{
 	public:
 
@@ -83,11 +88,13 @@ class Simon{
 		read_keys();
 		key_expansion();
 		print_keywords_to_file();
-		vector<mpz_class> yo = split_message("test message", block_size/2);
+		vector<unsigned long> yo = split_message("tst message", block_size);
 		for (int i = 0; i < yo.size(); ++i)
 		{
 			cout << yo[i] << endl;
-			cout << mpz_to_string(yo[i]) << endl;
+			mpz_class tmp;
+			tmp = yo[i];
+			cout << mpz_to_string(tmp) << endl;
 		}
 	
 		encrypt(yo[0], yo[1]);
@@ -96,7 +103,9 @@ class Simon{
 		for (int i = 0; i < yo.size(); ++i)
 		{
 			cout << yo[i] << endl;
-			cout << mpz_to_string(yo[i]) << endl;
+			mpz_class tmp;
+			tmp = yo[i];
+			cout << mpz_to_string(tmp) << endl;
 		}
 	}
 
@@ -107,14 +116,6 @@ class Simon{
 		{1,1,0,1,1,0,1,1,1,0,1,0,1,1,0,0,0,1,1,0,0,1,0,1,1,1,1,0,0,0,0,0,0,1,0,0,1,0,0,0,1,0,1,0,0,1,1,1,0,0,1,1,0,1,0,0,0,0,1,1,1,1},
 		{1,1,0,1,0,0,0,1,1,1,1,0,0,1,1,0,1,0,1,1,0,1,1,0,0,0,1,0,0,0,0,0,0,1,0,1,1,1,0,0,0,0,1,1,0,0,1,0,1,0,0,1,0,0,1,1,1,0,1,1,1,1}
 	};
-
-/*
-z = [11111010001001010110000111001101111101000100101011000011100110,
-10001110111110010011000010110101000111011111001001100001011010,
-10101111011100000011010010011000101000010001111110010110110011,
-11011011101011000110010111100000010010001010011100110100001111,
-11010001111001101011011000100000010111000011001010010011101111]
-*/
 	
 	int block_size = 64;
 	int key_size = 64;
@@ -123,7 +124,7 @@ z = [11111010001001010110000111001101111101000100101011000011100110,
 	int word_size = 64;
 
 	mpz_class key;
-	vector<mpz_class> keywords;
+	vector<unsigned long> keywords;
 
 	void generate_keys(){
 		ofstream myfile;
@@ -150,7 +151,7 @@ z = [11111010001001010110000111001101111101000100101011000011100110,
 			getline(myfile,line);
 			mpz_class key;
 			key = line;
-			keywords.push_back(key);
+			keywords.push_back(mpz_get_ui(key.get_mpz_t()));
 		}
 
 		myfile.close();
@@ -159,57 +160,46 @@ z = [11111010001001010110000111001101111101000100101011000011100110,
 	void key_expansion(){
 
 		keywords.resize(rounds);
-		mpz_class neg3, neg1, three;
-		neg3 = "-3", neg1 = "-1", three = "3";
 		for(int i = z_m; i < rounds; i++){
 			//cout << "=====BEGINLOOP\n========\n";
-			mpz_class tmp;
-			tmp = mpz_left_circular_shift(keywords[i-1], neg3);
+			//mpz_class tmp;
+			unsigned long tmp;
+			//tmp = mpz_left_circular_shift(keywords[i-1], neg3);
+			//tmp = circular_left_shift(keywords[i-1], block_size-3, block_size);
+			tmp = circular_right_shift(keywords[i-1], 3, block_size);
 			if(z_m == 4){
-				tmp = mpz_get_ui(keywords[i-3].get_mpz_t()) ^ mpz_get_ui(tmp.get_mpz_t()) ;
+				tmp = keywords[i-3] ^ tmp;
+				//tmp = mpz_get_ui(keywords[i-3].get_mpz_t()) ^ mpz_get_ui(tmp.get_mpz_t()) ;
 				//mpz_xor(tmp.get_mpz_t(), keywords[i-3].get_mpz_t(), tmp.get_mpz_t());
 			}
-			tmp = mpz_get_ui(tmp.get_mpz_t()) ^  mpz_get_ui(mpz_left_circular_shift(tmp, neg1).get_mpz_t());
-			
-			keywords[i] = (~ mpz_get_ui(keywords[i-z_m].get_mpz_t()))
-			 ^ mpz_get_ui(tmp.get_mpz_t()) ^ z[z_m][(i-z_m) % 62] ^
-				3;
+			//tmp = tmp ^ circular_left_shift(tmp, block_size-1, block_size);
+			tmp = tmp ^ circular_right_shift(tmp, 1, block_size);
 
-			// mpz_com(comp.get_mpz_t(), keywords[i-z_m].get_mpz_t());
-			// mpz_xor(keywords[i].get_mpz_t(), comp.get_mpz_t(), tmp.get_mpz_t());
-			// mpz_xor(keywords[i].get_mpz_t(),  keywords[i].get_mpz_t(), z_val.get_mpz_t());
-			// mpz_xor(keywords[i].get_mpz_t(), keywords[i].get_mpz_t(), three.get_mpz_t());
-			
+			//tmp = mpz_get_ui(tmp.get_mpz_t()) ^  mpz_get_ui(mpz_left_circular_shift(tmp, neg1).get_mpz_t());
+
+			keywords[i] = (~keywords[i-z_m]) ^ tmp ^ z[z_m][(i-z_m) & 62] ^ 3;
+
 		}
 	}
 
-	void encrypt(mpz_class& x, mpz_class& y){
+	void encrypt(unsigned long& x, unsigned long& y){
 	
-		mpz_class one, eight, two;
-		one = "1", eight = "8", two = "2";
 		for(int i = 0; i < rounds; i++){
-			unsigned long tmp;
-			tmp = mpz_get_ui(x.get_mpz_t());
-			x = mpz_get_ui(y.get_mpz_t()) ^ 
-				(mpz_get_ui(mpz_left_circular_shift(x, one).get_mpz_t()) &
-					mpz_get_ui(mpz_left_circular_shift(x, eight).get_mpz_t()))
-				^ mpz_get_ui(mpz_left_circular_shift(x, two).get_mpz_t())
-				^ mpz_get_ui(keywords[i].get_mpz_t());
+			
+			unsigned long tmp = x;
+			x = y ^ (circular_left_shift(x, 1, block_size) & circular_left_shift(x, 8, block_size)) ^ 
+					circular_left_shift(x, 2, block_size) ^ keywords[i];
 			y = tmp;
 		}
 	}
 
-	void decrypt(mpz_class &x, mpz_class &y){
-		mpz_class one, eight, two;
-		one = "1", eight = "8", two = "2";
+	void decrypt(unsigned long &x, unsigned long &y){
+		// mpz_class one, eight, two;
+		// one = "1", eight = "8", two = "2";
 		for(int i = rounds-1; i >= 0; i--){
-			unsigned long tmp;
-			tmp = mpz_get_ui(y.get_mpz_t());
-			y = mpz_get_ui(y.get_mpz_t()) ^ 
-				(mpz_get_ui(mpz_left_circular_shift(x, one).get_mpz_t()) &
-					mpz_get_ui(mpz_left_circular_shift(x, eight).get_mpz_t()))
-				^ mpz_get_ui(mpz_left_circular_shift(x, two).get_mpz_t())
-				^ mpz_get_ui(keywords[i].get_mpz_t());
+			unsigned long tmp = y;
+			y = x ^ (circular_left_shift(y, 1, block_size) & circular_left_shift(y, 8, block_size)) ^ 
+					circular_left_shift(y, 2, block_size) ^ keywords[i];
 			x = tmp;
 		}
 	}
