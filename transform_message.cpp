@@ -66,9 +66,6 @@ vector<unsigned long> split_message(const char* message, int bit_length){
 					, mpz_get_ui(chars_per_entry.get_mpz_t())).c_str()).get_mpz_t());
 	}
 
-	// for(auto i : message_vec){
-	// 	cout << mpz_to_string(i) << endl;
-	// }
 
 	return message_vec;
 }

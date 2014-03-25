@@ -21,7 +21,11 @@ two:
 	g++ $(TFLAG) $(SFLAG) $(FILE) $(OUT)
 	g++ $(TFLAG) $(SFLAG) generate_key.cpp -o generate
 
+objects:
+	g++ $(TFLAG) $(SFLAG) -o simon.o -c simon.cpp
 
+all:
+	g++ $(TFLAG) $(SFLAG) simon.o testing.cpp  -o app
 
 clean:
 	rm -rf *o modex
