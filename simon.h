@@ -50,6 +50,8 @@ class Simon{
 	unsigned long latest_x;
 	unsigned long latest_y;
 
+	vector<unsigned long> private_session_keys;
+
 	mpz_class key;
 	vector<unsigned long> keywords;
 
