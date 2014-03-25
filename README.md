@@ -9,4 +9,4 @@ make
 
 ./app
 
-Edit testing.cpp to change decryption message.
+Edit testing.cpp to change decryption message. Right now only decrypts/encrypts first 16 characters of a message. 
