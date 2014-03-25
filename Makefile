@@ -10,9 +10,18 @@ DFLAG = -Wall -Wextra -pedantic -Wvla -g -ggdb  -pg
 FILE = transform_message.cpp
 OUT= -o app
 
+default:
+	g++ $(TFLAG) $(SFLAG) simon.cpp -o simon
+
+debug:
+	g++ $(TFLAG) -std=c++11 $(DFLAG) simon.cpp -o simon
+
 #Submit
-normal:
+two:
 	g++ $(TFLAG) $(SFLAG) $(FILE) $(OUT)
+	g++ $(TFLAG) $(SFLAG) generate_key.cpp -o generate
+
+
 
 clean:
 	rm -rf *o modex

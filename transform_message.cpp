@@ -48,32 +48,29 @@ string mpz_to_string(const mpz_class& mpz_input){
 
 vector<mpz_class> split_message(const char* message, int bit_length){
 	if(bit_length% BIT_MOD != 0) {
-		printf("ERROR: %s:%d - Bit length not a multiple of %d\n", 
-				__FILE__, __LINE__, BIT_MOD);
+		printf("ERROR: %s:%d - Bit length %d not a multiple of %d\n", 
+				__FILE__, __LINE__, bit_length, BIT_MOD);
 		exit(1);
 	}
 	string input(message);
-	mpz_class size;
+	mpz_class size, chars_per_entry;
+	chars_per_entry = bit_length;
+	chars_per_entry = chars_per_entry / BIT_MOD;
 	size = input.size();
-	mpz_cdiv_q_2exp(size.get_mpz_t(), size.get_mpz_t(), BIT_MOD_2);
+	mpz_cdiv_q(size.get_mpz_t(), size.get_mpz_t(), chars_per_entry.get_mpz_t());
 	vector<mpz_class> message_vec(mpz_get_ui(size.get_mpz_t()));
-	cout << message_vec.size() << endl;
+	//cout << message_vec.size() << endl;
 	for(int i = 0; i < message_vec.size(); i++){
 		message_vec[i] = 
-			string_to_mpz(input.substr(i*BIT_MOD,BIT_MOD).c_str());
+			string_to_mpz(input.substr(i*mpz_get_ui(chars_per_entry.get_mpz_t())
+					, mpz_get_ui(chars_per_entry.get_mpz_t())).c_str());
 	}
 
-	for(auto i : message_vec){
-		cout << mpz_to_string(i) << endl;
-	}
+	// for(auto i : message_vec){
+	// 	cout << mpz_to_string(i) << endl;
+	// }
 
 	return message_vec;
-}
-
-int main(){
-	string hi = "hi";
-	//cout << string_to_mpz(" ") << endl;
-	split_message("test string", 128);
 }
 
 //|12345678|
