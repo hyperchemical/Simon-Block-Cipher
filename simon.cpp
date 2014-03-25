@@ -23,6 +23,32 @@ unsigned long circular_right_shift(unsigned long num, unsigned long shift, unsig
 	return (num >> shift) | (num << (size-shift));
 }
 
+void Simon::encrypt_message(string input){
+	read_keys();	
+	key_expansion();
+	vector<unsigned long> yo = split_message(input.c_str(), block_size);
+	if(yo.size() % 2 == 1){//im really lazy
+		yo.push_back(time(NULL));
+	}
+
+	encrypt(yo[0], yo[1]);
+	latest_x = yo[0];
+	latest_y = yo[1];
+}
+
+void Simon::decrypt_latest_message(){
+	decrypt(latest_x, latest_y);
+	print_long(latest_x);
+	print_long(latest_y);
+}
+
+void Simon::print_long(unsigned long input){
+	mpz_class tmp;
+	tmp = input;
+	cout << mpz_to_string(tmp) << endl;
+}
+
+
 void Simon::init(){
 	//generate_keys();
 	read_keys();
@@ -56,6 +82,8 @@ void Simon::init(){
 		cout << mpz_to_string(tmp) << endl;
 	}
 }
+
+
 
 void Simon::generate_keys(){
 	ofstream myfile;
@@ -135,10 +163,4 @@ void Simon::print_keywords_to_file(){
 	myfile.close();
 
 }
-
-
-// int main(){
-// 	Simon s;
-// 	s.init();
-// }
 
