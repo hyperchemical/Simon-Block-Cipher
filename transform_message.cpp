@@ -67,6 +67,18 @@ vector<unsigned long> split_message(const char* message, int bit_length){
 	}
 
 
+	if(message_vec.size() == 0){
+		printf("ERROR: %s:%d - Zero size vector\n", 
+				__FILE__, __LINE__);
+		exit(1);
+	}
+	if(message_vec.size() % 2 != 0){
+		message_vec.push_back(mpz_get_ui(string_to_mpz("    ").get_mpz_t()));
+
+	}
+
+
+
 	return message_vec;
 }
 

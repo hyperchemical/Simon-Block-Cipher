@@ -27,9 +27,6 @@ void Simon::encrypt_message(string input){
 	read_keys();	
 	key_expansion();
 	vector<unsigned long> yo = split_message(input.c_str(), block_size);
-	if(yo.size() % 2 == 1){//im really lazy
-		yo.push_back(time(NULL));
-	}
 
 	encrypt(yo[0], yo[1]);
 	latest_x = yo[0];
