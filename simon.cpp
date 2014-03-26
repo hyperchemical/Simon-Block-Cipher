@@ -26,23 +26,57 @@ unsigned long circular_right_shift(unsigned long num, unsigned long shift, unsig
 void Simon::encrypt_message(string input){
 	read_keys();	
 	key_expansion();
-	vector<unsigned long> yo = split_message(input.c_str(), block_size);
+	x_y = split_message(input.c_str(), block_size);
 
-	encrypt(yo[0], yo[1]);
-	latest_x = yo[0];
-	latest_y = yo[1];
+	assert(x_y.size()%2 == 0);
+
+	cout << "Orig: ";
+	print_all(true);
+	cout << endl;
+
+	cout << "Orig Num: ";
+	print_all(false);
+	cout << endl;
+
+	for(int i = 0; i < x_y.size(); i+=2){
+		encrypt(x_y[i], x_y[i+1]);
+	}
+
+	cout << "Encr Num: ";
+	print_all(false);
+	cout << endl;
+
 }
 
 void Simon::decrypt_latest_message(){
-	decrypt(latest_x, latest_y);
-	print_long(latest_x);
-	print_long(latest_y);
+	for(int i = 0; i < x_y.size(); i+=2){
+		decrypt(x_y[i], x_y[i+1]);
+	}
+
+	cout << "Decr Num: ";
+	print_all(false);
+	cout << endl;
+
+	cout << "Decr: ";
+ 	print_all(true);
+ 	cout << endl;
+
+
+}
+
+void Simon::print_all(bool str){
+	for(auto i : x_y){
+		if(str)
+			print_long(i);
+		else
+			cout << i;
+	}
 }
 
 void Simon::print_long(unsigned long input){
 	mpz_class tmp;
 	tmp = input;
-	cout << mpz_to_string(tmp) << endl;
+	cout << mpz_to_string(tmp);
 }
 
 

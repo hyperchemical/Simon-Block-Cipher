@@ -17,6 +17,6 @@ using namespace std;
 int main(){
 	Simon s;
 	//s.init();
-	s.encrypt_message("Test_Decryption");
+	s.encrypt_message("Test long message 1 2 3 4 5");
 	s.decrypt_latest_message();
 }

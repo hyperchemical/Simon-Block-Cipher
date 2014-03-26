@@ -47,8 +47,7 @@ class Simon{
 	int z_m = 2;
 	int word_size = 64;
 
-	unsigned long latest_x;
-	unsigned long latest_y;
+	vector<unsigned long> x_y;
 
 	vector<unsigned long> private_session_keys;
 
@@ -68,6 +67,8 @@ class Simon{
 	void print_keywords_to_file();
 
 	void print_long(unsigned long input);
+
+	void print_all(bool);
 };
 
 #endif
