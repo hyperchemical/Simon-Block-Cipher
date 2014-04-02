@@ -42,10 +42,48 @@ void Simon::encrypt_message(string input){
 		encrypt(x_y[i], x_y[i+1]);
 	}
 
+	cout << "Encr: ";
+	print_all(true);
+	cout << endl;
+
 	cout << "Encr Num: ";
 	print_all(false);
 	cout << endl;
 
+}
+
+vector<unsigned long> Simon::encrypt_public(vector<unsigned long> key, vector<unsigned long> plaintext){
+	assert(key.size() == 2);
+	assert(plaintext.size() % 2 == 0);
+
+	keywords.clear();
+	keywords.resize(key.size());
+	keywords[0] = key[0];
+	keywords[1] = key[1];
+	key_expansion();
+
+	for(int i = 0; i < plaintext.size(); i+=2){
+		encrypt(plaintext[i], plaintext[i+1]);
+	}
+
+	return plaintext;
+}	
+
+vector<unsigned long> Simon::decrypt_public(vector<unsigned long> key, vector<unsigned long> ciphertext){
+	assert(key.size() == 2);
+	assert(ciphertext.size() % 2 == 0);
+
+	keywords.clear();
+	keywords.resize(key.size());
+	keywords[0] = key[0];
+	keywords[1] = key[1];
+	key_expansion();
+
+	for(int i = 0; i < ciphertext.size(); i+=2){
+		decrypt(ciphertext[i], ciphertext[i+1]);
+	}
+
+	return ciphertext;
 }
 
 void Simon::decrypt_latest_message(){
@@ -81,7 +119,6 @@ void Simon::print_long(unsigned long input){
 
 
 void Simon::init(){
-	//generate_keys();
 	read_keys();
 	key_expansion();
 	print_keywords_to_file();
@@ -113,8 +150,6 @@ void Simon::init(){
 		cout << mpz_to_string(tmp) << endl;
 	}
 }
-
-
 
 void Simon::generate_keys(){
 	ofstream myfile;

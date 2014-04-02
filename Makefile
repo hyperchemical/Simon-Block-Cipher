@@ -11,8 +11,7 @@ FILE = transform_message.cpp
 OUT= -o app
 
 def:
-	g++ $(TFLAG) $(SFLAG) -o simon.o -c simon.cpp
-	g++ $(TFLAG) $(SFLAG) simon.o testing.cpp  -o app
+	g++ $(TFLAG) $(SFLAG) simon.cpp testing.cpp  -o app
 
 default:
 	g++ $(TFLAG) $(SFLAG) simon.cpp -o simon

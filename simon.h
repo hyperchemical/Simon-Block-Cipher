@@ -15,6 +15,7 @@
 #include <ctime>
 #include <cassert>
 #include "simon.h"
+#include "uberzahl.h"
 
 using namespace std;
 
@@ -30,6 +31,9 @@ class Simon{
 	void encrypt_message(string input);
 
 	void decrypt_latest_message();
+
+	vector<unsigned long> encrypt_public(vector<unsigned long> key, vector<unsigned long> plaintext);
+	vector<unsigned long> decrypt_public(vector<unsigned long> key, vector<unsigned long> ciphertext);
 
 	private: 
 
@@ -60,7 +64,7 @@ class Simon{
 
 	void key_expansion();
 
-	void encrypt(unsigned long& x, unsigned long& y);
+	void encrypt(unsigned long &x, unsigned long &y);
 
 	void decrypt(unsigned long &x, unsigned long &y);
 
