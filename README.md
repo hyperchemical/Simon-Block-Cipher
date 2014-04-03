@@ -32,7 +32,7 @@ To compile with your own app.cc:
 
 `testing.cpp` is an example run of the encryption/decryption with the test vectors for SIMON128/256 provided in the [paper](https://eprint.iacr.org/2013/404.pdf).
 	
-### Sample Output for Performance Vectors
+### Sample Output for Paper Vectors
 
 	Keys:       1f1e1d1c1b1a1918 1716151413121110 f0e0d0c0b0a0908 706050403020100 
 	Plaintext:  74206e69206d6f6f 6d69732061207369
