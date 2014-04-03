@@ -22,6 +22,8 @@ To compile with your own app.cc:
 
 	g++ -lgmpxx -lgmp -std=c++11 -O3 simon.cpp app.cc -o app
 
+### Example
+
 `testing.cpp` is an example run of the encryption/decryption with the test vectors for SIMON128/256 provided in the [paper](https://eprint.iacr.org/2013/404.pdf).
 	
 
