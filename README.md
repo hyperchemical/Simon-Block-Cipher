@@ -11,6 +11,8 @@ There are two public methods availiable:
 	vector<uint64_t> encrypt_public(vector<uint64_t> key, vector<uint64_t> plaintext);
 	vector<uint64_t> decrypt_public(vector<uint64_t> key, vector<uint64_t> ciphertext);
 
+Both functions return a vector that is the size of `plaintext` or `ciphertext`.
+
 The vector `key` must be of size 4.
 The vector `plaintext` must a multiple of 2 (recommended size 2).
 
