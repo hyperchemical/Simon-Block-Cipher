@@ -15,6 +15,8 @@
 
 using namespace std;
 
+#define NUMKEYS 4 
+
 void print_binary(uint64_t num){
 	for(int i = 63; i >= 0; i--){
 		cout << ((num >> i) & 1);
@@ -32,10 +34,9 @@ uint64_t circular_right_shift(uint64_t num, uint64_t shift, uint64_t size){
 }
 
 vector<uint64_t> Simon::encrypt_public(vector<uint64_t> key, vector<uint64_t> plaintext){
-	assert(key.size() == 4);
+	assert(key.size() == NUMKEYS);
 	assert(plaintext.size() % 2 == 0);
 
-	//keywords.resize(key.size());
 	keywords = key;
 	key_expansion();
 
@@ -47,10 +48,9 @@ vector<uint64_t> Simon::encrypt_public(vector<uint64_t> key, vector<uint64_t> pl
 }	
 
 vector<uint64_t> Simon::decrypt_public(vector<uint64_t> key, vector<uint64_t> ciphertext){
-	assert(key.size() == 4);
+	assert(key.size() == NUMKEYS);
 	assert(ciphertext.size() % 2 == 0);
 
-	//keywords.resize(key.size());
 	keywords = key;
 	key_expansion();
 
@@ -62,7 +62,7 @@ vector<uint64_t> Simon::decrypt_public(vector<uint64_t> key, vector<uint64_t> ci
 }
 
 void Simon::key_expansion(){
-	assert(keywords.size() >= 2 && keywords.size() <= 4);
+	assert(keywords.size() == NUMKEYS);
 	keywords.resize(rounds);
 	for(int i = z_m; i < rounds; i++){
 		uint64_t tmp;
