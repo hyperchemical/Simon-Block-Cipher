@@ -1,7 +1,0 @@
-make objects
-make all
-cp simon.o ./build
-cp transform_message.cpp ./build
-cp simon.h ./build
-cp testing.cpp ./build
-cp app ./build
