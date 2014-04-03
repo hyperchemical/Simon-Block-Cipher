@@ -16,20 +16,27 @@ using namespace std;
 
 int main(){
 	Simon s;
-	unsigned long x;
+	uint64_t x;
 
-	vector<unsigned long> keys;
-	vector<unsigned long> plaintext;
-	vector<unsigned long> ciphertext;
+	vector<uint64_t> keys(4);
+	vector<uint64_t> plaintext(2);
+	vector<uint64_t> ciphertext(2);
 
-	keys.push_back(506097522914230528);
-	keys.push_back(1084818905618843912);
+	//Using Simon 128/256 Example Vectors
 
-	cout << "Keys:       " << hex << keys[1] << " ";
-	cout << hex << keys[0] << endl;
+	keys[3] = 2242261671028070680;
+	keys[2] = 1663540288323457296;
+	keys[1] = 1084818905618843912;
+	keys[0] = 506097522914230528;
 
-	plaintext.push_back(7166182912792162917);
-	plaintext.push_back(7812731012696405024);
+	cout << "Keys:       ";
+	for(int i = keys.size()-1; i >=0; i--){
+		cout << hex << keys[i] << " ";
+	}
+	cout << endl;
+
+	plaintext[0] = 8367809505449045871;
+	plaintext[1] = 7883959205594428265;
 
 	cout << "Plaintext:  " << hex << plaintext[0] << " ";
 	cout << hex << plaintext[1] << endl;

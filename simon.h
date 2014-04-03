@@ -27,12 +27,6 @@ class Simon{
 
 	}
 
-	void init();
-
-	void encrypt_message(string input);
-
-	void decrypt_latest_message();
-
 	vector<uint64_t> encrypt_public(vector<uint64_t> key, vector<uint64_t> plaintext);
 	vector<uint64_t> decrypt_public(vector<uint64_t> key, vector<uint64_t> ciphertext);
 
@@ -46,10 +40,19 @@ class Simon{
 		{1,1,0,1,0,0,0,1,1,1,1,0,0,1,1,0,1,0,1,1,0,1,1,0,0,0,1,0,0,0,0,0,0,1,0,1,1,1,0,0,0,0,1,1,0,0,1,0,1,0,0,1,0,0,1,1,1,0,1,1,1,1}
 	};
 	
+	void init();
+	void encrypt_message(string input);
+	void decrypt_latest_message();
+	// const int block_size = 64;
+	// const int key_size = 64;
+	// const int rounds = 68;
+	// const int z_m = 2;
+	// const int word_size = 64;
+
 	const int block_size = 64;
 	const int key_size = 64;
-	const int rounds = 68;
-	const int z_m = 2;
+	const int rounds = 72;
+	const int z_m = 4;
 	const int word_size = 64;
 
 	vector<uint64_t> x_y;

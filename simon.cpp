@@ -63,13 +63,11 @@ void Simon::encrypt_message(string input){
 }
 
 vector<uint64_t> Simon::encrypt_public(vector<uint64_t> key, vector<uint64_t> plaintext){
-	assert(key.size() == 2);
+	assert(key.size() >= 2 && key.size() <= 4);
 	assert(plaintext.size() % 2 == 0);
 
-	keywords.resize(key.size());
-	keywords[0] = key[0];
-	keywords[1] = key[1];
-
+	//keywords.resize(key.size());
+	keywords = key;
 	key_expansion();
 
 	for(int i = 0; i < plaintext.size(); i+=2){
@@ -80,12 +78,11 @@ vector<uint64_t> Simon::encrypt_public(vector<uint64_t> key, vector<uint64_t> pl
 }	
 
 vector<uint64_t> Simon::decrypt_public(vector<uint64_t> key, vector<uint64_t> ciphertext){
-	assert(key.size() == 2);
+	assert(key.size() >= 2 && key.size() <= 4);
 	assert(ciphertext.size() % 2 == 0);
 
-	keywords.resize(key.size());
-	keywords[0] = key[0];
-	keywords[1] = key[1];
+	//keywords.resize(key.size());
+	keywords = key;
 	key_expansion();
 
 	for(int i = 0; i < ciphertext.size(); i+=2){
@@ -96,7 +93,7 @@ vector<uint64_t> Simon::decrypt_public(vector<uint64_t> key, vector<uint64_t> ci
 }
 
 void Simon::key_expansion(){
-	assert(keywords.size() == 2);
+	assert(keywords.size() >= 2 && keywords.size() <= 4);
 	keywords.resize(rounds);
 	for(int i = z_m; i < rounds; i++){
 		uint64_t tmp;
