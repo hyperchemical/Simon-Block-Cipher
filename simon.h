@@ -16,6 +16,7 @@
 #include <cassert>
 #include "simon.h"
 #include "uberzahl.h"
+#include <stdint.h>
 
 using namespace std;
 
@@ -32,8 +33,8 @@ class Simon{
 
 	void decrypt_latest_message();
 
-	vector<unsigned long> encrypt_public(vector<unsigned long> key, vector<unsigned long> plaintext);
-	vector<unsigned long> decrypt_public(vector<unsigned long> key, vector<unsigned long> ciphertext);
+	vector<uint64_t> encrypt_public(vector<uint64_t> key, vector<uint64_t> plaintext);
+	vector<uint64_t> decrypt_public(vector<uint64_t> key, vector<uint64_t> ciphertext);
 
 	private: 
 
@@ -45,18 +46,18 @@ class Simon{
 		{1,1,0,1,0,0,0,1,1,1,1,0,0,1,1,0,1,0,1,1,0,1,1,0,0,0,1,0,0,0,0,0,0,1,0,1,1,1,0,0,0,0,1,1,0,0,1,0,1,0,0,1,0,0,1,1,1,0,1,1,1,1}
 	};
 	
-	int block_size = 64;
-	int key_size = 64;
-	int rounds = 68;
-	int z_m = 2;
-	int word_size = 64;
+	const int block_size = 64;
+	const int key_size = 64;
+	const int rounds = 68;
+	const int z_m = 2;
+	const int word_size = 64;
 
-	vector<unsigned long> x_y;
+	vector<uint64_t> x_y;
 
-	vector<unsigned long> private_session_keys;
+	vector<uint64_t> private_session_keys;
 
 	mpz_class key;
-	vector<unsigned long> keywords;
+	vector<uint64_t> keywords;
 
 	void generate_keys();
 
@@ -64,13 +65,13 @@ class Simon{
 
 	void key_expansion();
 
-	void encrypt(unsigned long &x, unsigned long &y);
+	void encrypt(uint64_t &x, uint64_t &y);
 
-	void decrypt(unsigned long &x, unsigned long &y);
+	void decrypt(uint64_t &x, uint64_t &y);
 
 	void print_keywords_to_file();
 
-	void print_long(unsigned long input);
+	void print_long(uint64_t input);
 
 	void print_all(bool);
 };
