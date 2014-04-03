@@ -32,7 +32,7 @@ uint64_t circular_right_shift(uint64_t num, uint64_t shift, uint64_t size){
 }
 
 vector<uint64_t> Simon::encrypt_public(vector<uint64_t> key, vector<uint64_t> plaintext){
-	assert(key.size() >= 2 && key.size() <= 4);
+	assert(key.size() == 4);
 	assert(plaintext.size() % 2 == 0);
 
 	//keywords.resize(key.size());
@@ -47,7 +47,7 @@ vector<uint64_t> Simon::encrypt_public(vector<uint64_t> key, vector<uint64_t> pl
 }	
 
 vector<uint64_t> Simon::decrypt_public(vector<uint64_t> key, vector<uint64_t> ciphertext){
-	assert(key.size() >= 2 && key.size() <= 4);
+	assert(key.size() == 4);
 	assert(ciphertext.size() % 2 == 0);
 
 	//keywords.resize(key.size());
