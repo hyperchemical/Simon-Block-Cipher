@@ -1,4 +1,10 @@
 #EECS475P5-Simon
+* Team: Lord Helix
+* Team #: 26
+* Heyung Joo Oh (heyoh)
+* Haoran Ning (hning)
+* Michael Wang (milewa)
+
 Implementation of [SIMON128/256](https://eprint.iacr.org/2013/404.pdf) in C++11, gcc-4.7.0 with libgmp
 
 ##Usage
