@@ -19,8 +19,8 @@ int main(){
 	uint64_t x;
 
 	vector<uint64_t> keys(4);
-	vector<uint64_t> plaintext(4);
-	vector<uint64_t> ciphertext(4);
+	vector<uint64_t> plaintext(2);
+	vector<uint64_t> ciphertext(2);
 
 	//Using Simon 128/256 Example Vectors
 

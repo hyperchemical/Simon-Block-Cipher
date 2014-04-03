@@ -1,5 +1,5 @@
 #EECS475P5-Simon
-Implementation of SIMON128/256 in C++11, gcc-4.7.0 with libgmp
+Implementation of [SIMON128/256](https://eprint.iacr.org/2013/404.pdf) in C++11, gcc-4.7.0 with libgmp
 
 ##Usage
 To use, include `simon.h` and have `simon.cpp` and `simon.h` in the same directory
