@@ -70,14 +70,9 @@ vector<uint64_t> Simon::encrypt_public(vector<uint64_t> key, vector<uint64_t> pl
 	keywords[0] = key[0];
 	keywords[1] = key[1];
 
-	cout << "Keys:       " << hex << 0 << keywords[1] << " ";
-	cout << hex << 0 << keywords[0] << endl;
-	cout << "Keys:       " << hex << circular_right_shift(keywords[1], 4, 64) << " ";
-	cout << hex << circular_right_shift(keywords[0], 4, 64) << endl;
 	key_expansion();
 
 	for(int i = 0; i < plaintext.size(); i+=2){
-		cout << "encrypt\n";
 		encrypt(plaintext[i], plaintext[i+1]);
 	}
 
@@ -116,6 +111,7 @@ void Simon::key_expansion(){
 }
 
 void Simon::encrypt(uint64_t& x, uint64_t& y){
+	cout << "@@@Encryption phase...\n";
 	for(int i = 0; i < rounds; i++){
 		
 		uint64_t tmp = x;
@@ -124,9 +120,11 @@ void Simon::encrypt(uint64_t& x, uint64_t& y){
 			circular_left_shift(x, 2, word_size) ^ keywords[i];
 		y = tmp;
 	}	
+
 }
 
 void Simon::decrypt(uint64_t &x, uint64_t &y){
+	cout << "@@@Decryption phase...\n";
 	for(int i = rounds-1; i >= 0; i--){
 		uint64_t tmp = y;
 		y = x ^ (circular_left_shift(y, 1, word_size) & circular_left_shift(y, 8, word_size)) ^ 
